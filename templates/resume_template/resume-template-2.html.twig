@@ -1,0 +1,68 @@
+<div>
+<header>
+    <a href="/"><< Back</a>    
+</header>
+<hr/>
+{% block title %}<h1>GitHub Resume for {{ profile.name }}</h1>{% endblock %}
+<hr/>
+{% block body %}
+    <div id="wrapper">
+        <div id="container">
+            <div id="welcome">
+                {% if profile.html_url is not empty %}
+                <img src="{{ profile.avatar_url }}" alt="avatar of {{ profile.name }}">
+                {% endif %}
+            </div>
+
+            <div style="clear: both;"></div>
+
+            <div id="content">
+                <table>
+                    <tr>
+                        <td><strong>Username:</strong></td>
+                        <td><ul><li>{{ profile.name }}</li></ul></td>
+                    </tr>
+                    {% if profile.blog is not empty %}
+                    <tr>
+                        <td><strong>Website:</strong></td>
+                        <td><ul><li><a href="{{ profile.blog }}">{{ profile.blog }}</a></ul></li></td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td><strong>Repositores:</strong></td>
+                        <td>
+                            <ul>
+                                {% for repo in repositories %}
+                                    <li>
+                                        <a href="{{ repo.html_url }}">{{ repo.name }}</a>
+                                        {{ repo.description }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Languages:</strong></td>
+                        <td>                           
+                            {% if languages[0] | length > 0 %}
+                            <ul class="language">
+                                {% for key, value in languages[0] %}
+                                    <li>
+                                        <a href="https://github.com/search?q=user%3A{{ profile.login }}&amp;l={{ key }}">
+                                            {% if key|length %} {{ key }} {% else %} Other {% endif %}
+                                        </a>
+                                        ({{ (value * 100 / languages[1]) | round }}%)
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                                <h4>No Languages found</h4>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</div>
